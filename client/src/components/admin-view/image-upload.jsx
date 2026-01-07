@@ -46,32 +46,31 @@ function ProductImageUpload({
   }
 
   async function uploadImageToCloudinary() {
-  try {
-    setImageLoadingState(true);
-    const data = new FormData();
-    data.append("my_file", imageFile);
+    try {
+      setImageLoadingState(true);
+      const data = new FormData();
+      data.append("my_file", imageFile);
 
-    const response = await axios.post(
-      "http://localhost:5000/api/admin/products/upload-image",
-      data
-    );
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/admin/products/upload-image`,
+        data
+      );
 
-    console.log("✅ Cloudinary Upload Response:", response.data);
+      console.log("✅ Cloudinary Upload Response:", response.data);
 
-    if (response?.data?.success && response?.data?.url) {
-  setUploadedImageUrl(response.data.url);
-} else {
-  console.error("❌ Upload failed or no URL returned:", response.data);
-  alert("Image upload failed! Check backend response.");
-}
-
-  } catch (error) {
-    console.error("❌ Error uploading image:", error);
-    alert("Error uploading image. Check console for details.");
-  } finally {
-    setImageLoadingState(false);
+      if (response?.data?.success && response?.data?.url) {
+        setUploadedImageUrl(response.data.url);
+      } else {
+        console.error("❌ Upload failed or no URL returned:", response.data);
+        alert("Image upload failed! Check backend response.");
+      }
+    } catch (error) {
+      console.error("❌ Error uploading image:", error);
+      alert("Error uploading image. Check console for details.");
+    } finally {
+      setImageLoadingState(false);
+    }
   }
-}
 
   useEffect(() => {
     if (imageFile !== null) uploadImageToCloudinary();
